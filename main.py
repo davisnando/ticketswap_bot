@@ -17,19 +17,7 @@ URL = HOST + "/api/tickets/14c6ccc531/walibi-halloween-fright-nights"
 COOKIES = {"api_access_token": API_KEY, "session": SESSION_ID}
 
 
-def get_ticket():
-    """ Get Cheapest ticket """
-    # Getting the cheapest ticket
-    response = requests.get(EVENT_URL, cookies=COOKIES)
-    html = response.content.decode("utf-8")
-    parsed_html = BeautifulSoup(html, "html.parser")
-    urlobject = parsed_html.body.find('a', attrs={'itemprop': "offerurl"})
-    if urlobject is None:
-        print("no offers")
-        return False
-    attributes = urlobject.attrs
-    ticket_link = attributes['href']
-
+def explode_ticket(ticket_link):
     # Get tokens that you need to have to reserve the ticket and getting the get in cart link
     response = requests.get(HOST + ticket_link, cookies=COOKIES)
     html = response.content.decode("utf-8")
@@ -37,6 +25,7 @@ def get_ticket():
 
     token_object = parsed_html.body.find('input', attrs={"name":"token"})
     if token_object is None:
+        print("Failed to get token")
         return False
     token_attrs = token_object.attrs
 
@@ -56,6 +45,25 @@ def get_ticket():
     ticket_link_reserve = parsed_html.body.find('form', attrs={"id":"listing-reserve-form"}).attrs
     ticket_reserve_link = ticket_link_reserve['data-endpoint']
     return {"token": token, "reserve_token": reserve_token, "ticket_link": ticket_reserve_link, "more_data": add_data}
+
+def get_ticket():
+    """ Get Cheapest ticket """
+    # Getting the cheapest ticket
+    response = requests.get(EVENT_URL, cookies=COOKIES)
+    html = response.content.decode("utf-8")
+    parsed_html = BeautifulSoup(html, "html.parser")
+    urlobject = parsed_html.body.findAll('a', attrs={'itemprop': "offerurl"})
+    if urlobject is None:
+        print("no offers")
+        return False
+    for item in urlobject:
+        attributes = item.attrs
+        ticket_link = attributes['href']
+        data = explode_ticket(ticket_link)
+        if data is not False:
+            return data
+
+
 
 def reserve_ticket():
     """ Reserve ticket """
