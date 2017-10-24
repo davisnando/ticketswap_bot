@@ -2,8 +2,8 @@
 import json
 import sys
 import time
-
 import webbrowser
+
 import requests
 
 try:
@@ -49,7 +49,10 @@ def explode_ticket(ticket_link):
     reserve_token = reserve_token_attrs['value']
     ticket_link_reserve = parsed_html.body.find('form', attrs={"id":"listing-reserve-form"}).attrs
     ticket_reserve_link = ticket_link_reserve['data-endpoint']
-    return {"token": token, "reserve_token": reserve_token, "ticket_link": ticket_reserve_link, "more_data": add_data}
+    return {"token": token,
+            "reserve_token": reserve_token,
+            "ticket_link": ticket_reserve_link,
+            "more_data": add_data}
 
 def get_ticket():
     """ Get Cheapest ticket """
@@ -95,6 +98,6 @@ if __name__ == "__main__":
         SESSION_ID = sys.argv[2]
     while reserve_ticket() is False:
         print("Trying again!")
-        time.sleep(1)
+        time.sleep(.5)
     print('Successfull added ticket to your account')
     webbrowser.open(HOST + '/cart', new=2)
