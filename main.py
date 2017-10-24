@@ -19,14 +19,13 @@ EVENT_URL = "https://www.ticketswap.nl/event/walibi-halloween-fright-nights/27-o
 HOST = "https://www.ticketswap.nl"
 URL = HOST + "/api/tickets/14c6ccc531/walibi-halloween-fright-nights"
 COOKIES = {"api_access_token": API_KEY, "session": SESSION_ID}
-
+AMOUNT = 3
 
 def explode_ticket(ticket_link):
     """ Gets tokens from ticket page """
     # Get tokens that you need to have to reserve the ticket and getting the get in cart link
     response = requests.get(HOST + ticket_link, cookies=COOKIES)
-    html = response.content.decode("utf-8")
-    parsed_html = BeautifulSoup(html, "html.parser")
+    parsed_html = BeautifulSoup(response.content.decode("utf-8"), "html.parser")
 
     token_object = parsed_html.body.find('input', attrs={"name":"token"})
     if token_object is None:
@@ -44,7 +43,15 @@ def explode_ticket(ticket_link):
     if seats is not None:
         add_data['tickets[]'] = seats.attrs['value']
     else:
-        add_data['amount'] = 1
+        items = parsed_html.body.find('select', attrs={'id': 'listing-show-amount'})
+        count = len(items.findChildren())
+        global AMOUNT
+        if count > AMOUNT:
+            add_data['amount'] = AMOUNT
+            AMOUNT = 0
+        else:
+            add_data['amount'] = count
+            AMOUNT = AMOUNT - count
     token = token_attrs['value']
     reserve_token = reserve_token_attrs['value']
     ticket_link_reserve = parsed_html.body.find('form', attrs={"id":"listing-reserve-form"}).attrs
@@ -88,6 +95,7 @@ def reserve_ticket():
     # add ticket in cart
     ticket = requests.post(HOST + content['ticket_link'], data=formdata, cookies=COOKIES)
     content = json.loads(ticket.content.decode("utf-8"))
+    print('Successfull added ticket to your account')
     return bool(content['success'])
 
 
@@ -96,8 +104,9 @@ if __name__ == "__main__":
         EVENT_URL = sys.argv[1]
     if len(sys.argv) >= 3 and sys.argv[2] is not None:
         SESSION_ID = sys.argv[2]
-    while reserve_ticket() is False:
+    if len(sys.argv) >= 4 and sys.argv[3] is not None:
+        AMOUNT = int(sys.argv[3])
+    while reserve_ticket() is False or AMOUNT > 0:
         print("Trying again!")
         time.sleep(.5)
-    print('Successfull added ticket to your account')
     webbrowser.open(HOST + '/cart', new=2)
