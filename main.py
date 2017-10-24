@@ -1,6 +1,7 @@
 """ Ticket swap bot """
 import json
 import sys
+import time
 import requests
 try:
     from BeautifulSoup import BeautifulSoup
@@ -18,6 +19,7 @@ COOKIES = {"api_access_token": API_KEY, "session": SESSION_ID}
 
 
 def explode_ticket(ticket_link):
+    """ Gets tokens from ticket page """
     # Get tokens that you need to have to reserve the ticket and getting the get in cart link
     response = requests.get(HOST + ticket_link, cookies=COOKIES)
     html = response.content.decode("utf-8")
@@ -52,6 +54,9 @@ def get_ticket():
     response = requests.get(EVENT_URL, cookies=COOKIES)
     html = response.content.decode("utf-8")
     parsed_html = BeautifulSoup(html, "html.parser")
+    not_exist = parsed_html.body.find('div', attrs={'class': "no-tickets"})
+    if not_exist is not None:
+        return False
     urlobject = parsed_html.body.findAll('a', attrs={'itemprop': "offerurl"})
     if urlobject is None:
         print("no offers")
@@ -62,6 +67,7 @@ def get_ticket():
         data = explode_ticket(ticket_link)
         if data is not False:
             return data
+    return False
 
 
 
@@ -88,4 +94,5 @@ if __name__ == "__main__":
         SESSION_ID = sys.argv[2]
     while reserve_ticket() is False:
         print("Trying again!")
+        time.sleep(1)
     print('Successfull added ticket to your account')
