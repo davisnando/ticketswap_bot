@@ -2,7 +2,10 @@
 import json
 import sys
 import time
+
+import webbrowser
 import requests
+
 try:
     from BeautifulSoup import BeautifulSoup
 except ImportError:
@@ -39,7 +42,7 @@ def explode_ticket(ticket_link):
     add_data = {}
     seats = parsed_html.body.find('input', attrs={'name': 'tickets[]'})
     if seats is not None:
-        add_data['tickets[]'] =seats.attrs['value']
+        add_data['tickets[]'] = seats.attrs['value']
     else:
         add_data['amount'] = 1
     token = token_attrs['value']
@@ -74,7 +77,7 @@ def get_ticket():
 def reserve_ticket():
     """ Reserve ticket """
     content = get_ticket()
-    if content == False:
+    if content is False:
         return False
     token = content['token']
     reserve_token = content['reserve_token']
@@ -82,10 +85,8 @@ def reserve_ticket():
     # add ticket in cart
     ticket = requests.post(HOST + content['ticket_link'], data=formdata, cookies=COOKIES)
     content = json.loads(ticket.content.decode("utf-8"))
-    if content['success'] is True:
-        return True
-    else:
-        return False
+    return bool(content['success'])
+
 
 if __name__ == "__main__":
     if  len(sys.argv) >= 2 and sys.argv[1] is not None:
@@ -96,3 +97,4 @@ if __name__ == "__main__":
         print("Trying again!")
         time.sleep(1)
     print('Successfull added ticket to your account')
+    webbrowser.open(HOST + '/cart', new=2)
