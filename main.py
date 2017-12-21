@@ -24,7 +24,7 @@ class TicketSwap:
     def login(self):
         username = input('Facebook username: ')
         password = getpass.getpass('Facebook password: ')
-        driver = webdriver.Chrome(executable_path=r'chromedriver')
+        driver = webdriver.Chrome()
         driver.get(HOST)
         login_button = driver.find_element_by_class_name(
                     'main-navigation--desktop').find_elements_by_tag_name('li')[1]
