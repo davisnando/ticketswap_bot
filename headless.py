@@ -54,8 +54,12 @@ class TicketSwap:
         self.cookies = self.__handle_cookies(driver.get_cookies())
 
         driver.quit()
-        
+
         display.stop()
+
+        if 'api_access_token' not in self.cookies:
+            print('username or password is invalid!')
+            self.login()
 
     def __handle_cookies(self, cookieList):
         cookies = {}
