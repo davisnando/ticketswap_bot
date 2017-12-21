@@ -26,4 +26,5 @@ unzip the driver that you need and move the file to:
 
 ## For the headless script (Linux only I think):
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `sudo apt install xvfb`
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `pip install pyvirtualdisplay`
+ 
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `pip install pyvirtualdisplay`
