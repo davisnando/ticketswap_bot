@@ -22,3 +22,7 @@ unzip the driver that you need and move the file to:
  
  ### For windows:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; move the chromedriver.exe file to: `<PYTHON FOLDER>/scripts`
+
+
+## For the headless script:
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `sudo apt install xvfb`
