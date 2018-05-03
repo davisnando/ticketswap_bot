@@ -29,6 +29,10 @@ class TicketSwap:
         login_button = driver.find_element_by_class_name(
                     'main-navigation--desktop').find_elements_by_tag_name('li')[1]
         login_button.click()
+        time.sleep(.2)
+        facebook_button = driver.find_element_by_class_name('login-button--facebook')
+        facebook_button.click()
+
         time.sleep(1)
 
         driver.switch_to_window(driver.window_handles[1])
@@ -42,6 +46,15 @@ class TicketSwap:
         send_login.click()
 
         time.sleep(1)
+
+        try:
+            confirm = driver.find_element_by_name('__CONFIRM__')
+
+            confirm.click()
+
+            time.sleep(1)
+        except Exception:
+            pass
 
         driver.switch_to_window(driver.window_handles[0])
 
@@ -77,9 +90,7 @@ class TicketSwap:
         # Getting the cheapest ticket
         response = requests.get(eventurl, cookies=self.cookies)
         html = response.content.decode("utf-8")
-        with open('test.html', 'w') as filename:
-            filename.write(html)
-        
+
         parsed_html = BeautifulSoup(html, "html.parser")
         not_exist = parsed_html.body.find('div', attrs={'class': "no-tickets"})
         if not_exist is not None:
@@ -146,4 +157,3 @@ class TicketSwap:
 if __name__ == "__main__":
     t = TicketSwap()
     t.start()
-

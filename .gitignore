@@ -1,2 +1,3 @@
-test.html
 .vscode/*
+*.swp
+.vscode/settings.json
