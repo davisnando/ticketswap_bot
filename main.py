@@ -27,10 +27,12 @@ class TicketSwap:
         driver = webdriver.Chrome()
         driver.get(HOST)
         login_button = driver.find_element_by_class_name(
-                    'main-navigation--desktop').find_elements_by_tag_name('li')[1]
+                    'Menubar__NavList-sc-1lcf4ys-2').find_elements_by_tag_name('li')[3]
         login_button.click()
-        time.sleep(.2)
-        facebook_button = driver.find_element_by_class_name('login-button--facebook')
+        time.sleep(3)
+        facebook_button = driver.find_elements_by_xpath(
+            "//*[contains(text(), 'Ga verder met Facebook')]"
+        )[1]
         facebook_button.click()
 
         time.sleep(1)
@@ -63,8 +65,8 @@ class TicketSwap:
         self.cookies = self.__handle_cookies(driver.get_cookies())
 
         driver.quit()
-
-        if 'api_access_token' not in self.cookies:
+        
+        if 'token' not in self.cookies:
             print('username or password is invalid!')
             self.login()
 
@@ -90,17 +92,17 @@ class TicketSwap:
         # Getting the cheapest ticket
         response = requests.get(eventurl, cookies=self.cookies)
         html = response.content.decode("utf-8")
-
         parsed_html = BeautifulSoup(html, "html.parser")
         not_exist = parsed_html.body.find('div', attrs={'class': "no-tickets"})
         if not_exist is not None:
             print("no tickets")
             return False
-        urlobject = parsed_html.body.findAll('a', attrs={'itemprop': "offerurl"})
+        urlobject = parsed_html.body.findAll('div', attrs={'class': 'listings-item--title'})
         if urlobject is None:
             print("no offers")
             return False
         for item in urlobject:
+            item = item.findAll('a')[0]
             attributes = item.attrs
             ticket_link = attributes['href']
             data = self.explode_ticket(ticket_link)
@@ -114,7 +116,7 @@ class TicketSwap:
         # Get tokens that you need to have to reserve the ticket and getting the get in cart link
         response = requests.get(HOST + ticket_link, cookies=self.cookies)
         parsed_html = BeautifulSoup(response.content.decode("utf-8"), "html.parser")
-        token_object = parsed_html.body.find('input', attrs={"name": "token"})
+        token_object = parsed_html.body.find('input', attrs={"name": "reserve[_token]"})
         if token_object is None:
             print("Failed to get token")
             return False
