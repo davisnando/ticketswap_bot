@@ -85,7 +85,7 @@ class TicketSwap:
                 self.reserve_ticket(data)
                 self.has_tickets = True
                 webbrowser.open(HOST + '/cart', new=2)
-            time.sleep(1)
+            time.sleep(0.5)
 
     def get_ticket(self, eventurl):
         """ Get Cheapest ticket """
@@ -132,7 +132,7 @@ class TicketSwap:
         if seats is not None:
             add_data['tickets[]'] = seats.attrs['value']
         else:
-            items = parsed_html.body.find('select', attrs={'id': 'listing-show-amount'})
+            items = parsed_html.body.find('select', attrs={'name': 'amount'})
             count = len(items.findChildren())
             add_data['amount'] = count
         token = token_attrs['value']
