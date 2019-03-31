@@ -46,9 +46,6 @@ class TicketSwap:
         
         if driver.find_element_by_id('loginbutton'):
                 send_login = driver.find_element_by_id('loginbutton')
-                send_login.click()
-
-                time.sleep(1)
         
         elif driver.find_element_by_id('u_0_0'):
                 send_login = driver.find_element_by_id('u_0_0')
