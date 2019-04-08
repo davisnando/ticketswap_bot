@@ -43,11 +43,15 @@ class TicketSwap:
 
         userInput.send_keys(username)
         passInput.send_keys(password)
-
-        send_login = driver.find_element_by_id('u_0_0')
-        send_login.click()
-
-        time.sleep(1)
+        
+        if driver.find_element_by_id('loginbutton'):
+                send_login = driver.find_element_by_id('loginbutton')
+        
+        elif driver.find_element_by_id('u_0_0'):
+                send_login = driver.find_element_by_id('u_0_0')
+                
+                send_login.click()
+                time.sleep(1)
 
         try:
             confirm = driver.find_element_by_name('__CONFIRM__')
