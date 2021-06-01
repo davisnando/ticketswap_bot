@@ -14,5 +14,5 @@ pylint==1.7.4
 requests==2.18.4
 selenium==3.8.0
 six==1.11.0
-urllib3==1.22
+urllib3==1.26.5
 wrapt==1.10.11
