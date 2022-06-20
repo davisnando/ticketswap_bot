@@ -1,5 +1,7 @@
 # Ticketswap bot
 
+# it's unfortunately not working any more! Feel free to update the code so that is works again.
+
 to install:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` git clone https://github.com/davisnando/ticketswap_bot.git `
