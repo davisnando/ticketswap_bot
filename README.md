@@ -1,7 +1,7 @@
 # Ticketswap bot
 
 # it's unfortunately not working any more! Feel free to update the code so that is works again.
-## You can also support me by donating: [Donate](https://www.paypal.com/donate/?hosted_button_id=HJBC6K8CFNVHU)
+## You can also help me supporting this project by donating: [Donate](https://www.paypal.com/donate/?hosted_button_id=HJBC6K8CFNVHU)
 
 to install:
 
