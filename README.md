@@ -1,6 +1,6 @@
 # Ticketswap bot
 
-Code in this repository is outdated and doesn't work anymore. Because of high request i've created a new bot that you can buy
+Code in this repository is outdated and doesn't work anymore. 
 
 # How does the new bot works?
 
