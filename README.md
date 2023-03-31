@@ -1,7 +1,7 @@
 # Ticketswap bot
 
-Code in this repository is outdated and doesn't work anymore. 
-
+Code in this repository is outdated and doesn't work anymore. Because of high request i've created a new bot that you can buy
+Please send a mail to nandodavis@gmail.com
 # How does the new bot works?
 
 ## When ticket found
